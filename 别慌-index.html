@@ -1,0 +1,2431 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>别慌 — 生活难题解决助手</title>
+<style>
+/* ========== CSS Variables ========== */
+:root {
+  --bg: #F7F5F2;
+  --bg2: #FFFFFF;
+  --ink: #1A1A1A;
+  --muted: #6B6B6B;
+  --rule: #E2DDD6;
+  --accent: #E85D3F;
+  --accent-dark: #D14E32;
+  --accent2: #2563EB;
+  --accent-light: #FEF2F0;
+  --accent2-light: #EFF6FF;
+  --radius: 16px;
+  --radius-sm: 10px;
+  --shadow: 0 8px 30px rgba(26,26,26,0.08);
+  --shadow-hover: 0 12px 40px rgba(26,26,26,0.12);
+}
+
+/* ========== SVG Icons ========== */
+.inline-icon {
+  display: inline-block;
+  width: 1.2em;
+  height: 1.2em;
+  vertical-align: -0.15em;
+  margin-right: 0.2em;
+}
+.inline-icon svg {
+  width: 100%;
+  height: 100%;
+  fill: currentColor;
+}
+
+/* ========== Base ========== */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', 'Helvetica Neue', sans-serif;
+  background: var(--bg);
+  color: var(--ink);
+  line-height: 1.7;
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+}
+a { color: var(--accent); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+/* ========== Scrollbar ========== */
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--rule); border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: var(--muted); }
+
+/* ========== Layout ========== */
+.container { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
+section { padding: 80px 0; }
+section.alt { background: var(--bg2); }
+
+/* ========== Header ========== */
+.site-header {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 100;
+  background: rgba(247,245,242,0.92);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--rule);
+  transition: box-shadow 0.3s;
+}
+.site-header.scrolled { box-shadow: 0 2px 20px rgba(26,26,26,0.06); }
+.site-header .container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 64px;
+}
+.logo {
+  font-weight: 700;
+  font-size: 1.4rem;
+  color: var(--ink);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: default;
+}
+.logo-icon {
+  width: 32px; height: 32px;
+  background: var(--accent);
+  border-radius: 8px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+.nav-links {
+  display: flex;
+  gap: 28px;
+  list-style: none;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+.nav-links a { color: var(--muted); transition: color 0.2s; }
+.nav-links a:hover { color: var(--ink); text-decoration: none; }
+.mobile-menu-btn {
+  display: none;
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: var(--ink);
+  padding: 4px;
+}
+
+/* ========== Hero ========== */
+.hero {
+  padding: 140px 0 100px;
+  position: relative;
+  overflow: hidden;
+}
+.hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at 20% 50%, rgba(232,93,63,0.06) 0%, transparent 60%),
+              radial-gradient(ellipse at 80% 20%, rgba(37,99,235,0.04) 0%, transparent 50%);
+  z-index: 0;
+}
+.hero .container { position: relative; z-index: 1; text-align: center; }
+.hero-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--accent-light);
+  color: var(--accent);
+  font-size: 0.8rem;
+  font-weight: 600;
+  padding: 6px 16px;
+  border-radius: 100px;
+  margin-bottom: 24px;
+}
+.hero-tag .dot {
+  width: 6px; height: 6px;
+  background: var(--accent);
+  border-radius: 50%;
+  animation: pulse 2s infinite;
+}
+@keyframes pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.5; transform: scale(1.3); }
+}
+.hero h1 {
+  font-size: clamp(2.2rem, 5vw, 3.5rem);
+  font-weight: 800;
+  line-height: 1.25;
+  letter-spacing: -0.02em;
+  margin-bottom: 20px;
+  background: linear-gradient(135deg, var(--ink) 0%, var(--muted) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.hero .lead {
+  font-size: 1.15rem;
+  color: var(--muted);
+  margin-bottom: 36px;
+  max-width: 560px;
+  margin-left: auto;
+  margin-right: auto;
+}
+.hero-search {
+  max-width: 560px;
+  margin: 0 auto 32px;
+  position: relative;
+}
+.hero-search input {
+  width: 100%;
+  padding: 16px 56px 16px 20px;
+  border: 2px solid var(--rule);
+  border-radius: 100px;
+  font-size: 1rem;
+  background: var(--bg2);
+  color: var(--ink);
+  outline: none;
+  transition: all 0.3s;
+  font-family: inherit;
+}
+.hero-search input:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 4px rgba(232,93,63,0.1);
+}
+.hero-search input::placeholder { color: #aaa; }
+.hero-search .search-icon {
+  position: absolute;
+  right: 18px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 1.2rem;
+  color: var(--muted);
+  pointer-events: none;
+}
+.hero-cta { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+
+/* ========== Buttons ========== */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 14px 28px;
+  border-radius: 100px;
+  font-weight: 600;
+  font-size: 0.95rem;
+  transition: all 0.25s ease;
+  cursor: pointer;
+  border: none;
+  font-family: inherit;
+}
+.btn-primary {
+  background: var(--accent);
+  color: #fff;
+  box-shadow: 0 4px 16px rgba(232,93,63,0.3);
+}
+.btn-primary:hover {
+  background: var(--accent-dark);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(232,93,63,0.35);
+  text-decoration: none;
+}
+.btn-secondary {
+  background: var(--bg2);
+  color: var(--ink);
+  border: 1px solid var(--rule);
+}
+.btn-secondary:hover {
+  background: var(--bg);
+  transform: translateY(-2px);
+  text-decoration: none;
+}
+.btn-sm {
+  padding: 8px 16px;
+  font-size: 0.85rem;
+  border-radius: 8px;
+}
+.btn-outline {
+  background: transparent;
+  color: var(--accent);
+  border: 1.5px solid var(--accent);
+}
+.btn-outline:hover {
+  background: var(--accent-light);
+  text-decoration: none;
+}
+
+/* ========== Section Header ========== */
+.section-header {
+  text-align: center;
+  max-width: 640px;
+  margin: 0 auto 56px;
+}
+.section-header h2 {
+  font-size: clamp(1.8rem, 3.5vw, 2.6rem);
+  font-weight: 800;
+  line-height: 1.25;
+  letter-spacing: -0.02em;
+  margin-bottom: 12px;
+}
+.section-header p { color: var(--muted); font-size: 1.05rem; }
+.section-label {
+  display: inline-block;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--accent);
+  margin-bottom: 10px;
+}
+
+/* ========== Scenario Cards ========== */
+.scenario-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 24px;
+}
+.scenario-card {
+  background: var(--bg2);
+  border: 2px solid var(--rule);
+  border-radius: var(--radius);
+  padding: 32px 28px;
+  cursor: pointer;
+  transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+  overflow: hidden;
+}
+.scenario-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 4px;
+  background: var(--accent);
+  transform: scaleX(0);
+  transition: transform 0.35s ease;
+  transform-origin: left;
+}
+.scenario-card:hover {
+  transform: translateY(-6px);
+  box-shadow: var(--shadow-hover);
+  border-color: var(--accent);
+}
+.scenario-card:hover::before { transform: scaleX(1); }
+.scenario-card.active {
+  border-color: var(--accent);
+  box-shadow: 0 8px 30px rgba(232,93,63,0.15);
+}
+.scenario-card.active::before { transform: scaleX(1); }
+.scenario-card.highlighted {
+  border-color: var(--accent);
+  animation: highlightPulse 1s ease;
+}
+@keyframes highlightPulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(232,93,63,0); }
+  50% { box-shadow: 0 0 0 8px rgba(232,93,63,0.2); }
+}
+.scenario-emoji {
+  font-size: 2.2rem;
+  margin-bottom: 16px;
+  display: block;
+}
+.scenario-emoji svg { width: 36px; height: 36px; color: var(--accent); }
+.scenario-emoji-svg { display: inline-flex; align-items: center; justify-content: center; width: 36px; height: 36px; color: var(--accent); margin-bottom: 12px; }
+.scenario-emoji-svg svg { width: 100%; height: 100%; }
+.scenario-card h3 {
+  font-size: 1.15rem;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+.scenario-card p { color: var(--muted); font-size: 0.92rem; margin: 0; }
+
+/* ========== How to Use ========== */
+.steps-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 32px;
+  position: relative;
+}
+.steps-row::before {
+  content: '';
+  position: absolute;
+  top: 32px;
+  left: calc(16.66%);
+  right: calc(16.66%);
+  height: 2px;
+  background: var(--rule);
+  z-index: 0;
+}
+.use-step {
+  text-align: center;
+  position: relative;
+  z-index: 1;
+}
+.use-step-num {
+  width: 64px; height: 64px;
+  border-radius: 50%;
+  background: var(--accent);
+  color: #fff;
+  font-weight: 800;
+  font-size: 1.3rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 20px;
+  box-shadow: 0 4px 16px rgba(232,93,63,0.25);
+}
+.use-step h4 {
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+.use-step p { color: var(--muted); font-size: 0.92rem; }
+
+/* ========== Detail Section ========== */
+.detail-section {
+  display: none;
+  padding: 0 0 80px;
+  background: var(--bg);
+}
+.detail-section.open { display: block; }
+.detail-container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+.detail-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 32px;
+  padding-bottom: 20px;
+  border-bottom: 2px solid var(--rule);
+}
+.detail-header-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.detail-header-left .emoji { font-size: 1.8rem; }
+.detail-header-left h2 {
+  font-size: 1.5rem;
+  font-weight: 800;
+}
+.close-detail {
+  width: 40px; height: 40px;
+  border-radius: 50%;
+  border: 1.5px solid var(--rule);
+  background: var(--bg2);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  color: var(--muted);
+  transition: all 0.2s;
+}
+.close-detail:hover {
+  background: var(--accent-light);
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+/* ========== City Tabs ========== */
+.city-tabs {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 28px;
+  flex-wrap: wrap;
+}
+.city-tab {
+  padding: 10px 24px;
+  border-radius: 100px;
+  border: 1.5px solid var(--rule);
+  background: var(--bg2);
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: var(--muted);
+  transition: all 0.3s;
+  font-family: inherit;
+}
+.city-tab:hover { border-color: var(--accent); color: var(--accent); }
+.city-tab.active {
+  background: var(--accent);
+  color: #fff;
+  border-color: var(--accent);
+  box-shadow: 0 4px 12px rgba(232,93,63,0.3);
+}
+
+/* ========== Five Dimension Cards ========== */
+.five-dims {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 16px;
+  margin-bottom: 40px;
+}
+.dim-card {
+  background: var(--bg2);
+  border: 1.5px solid var(--rule);
+  border-radius: var(--radius-sm);
+  padding: 24px;
+  transition: all 0.3s;
+}
+.dim-card:hover {
+  box-shadow: var(--shadow);
+  border-color: var(--accent);
+  transform: translateY(-2px);
+}
+.dim-card-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--accent);
+  margin-bottom: 14px;
+  text-transform: none;
+}
+.dim-card-title .dim-icon {
+  width: 28px; height: 28px;
+  border-radius: 8px;
+  background: var(--accent-light);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.9rem;
+}
+.dim-card .dim-content { font-size: 0.95rem; line-height: 1.8; }
+.dim-card .dim-content strong { font-weight: 600; }
+.dim-card .dim-content .info-warn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.78rem;
+  color: #D97706;
+  margin-top: 8px;
+  padding: 4px 8px;
+  background: #FFFBEB;
+  border-radius: 6px;
+}
+.dim-links { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 10px; }
+.dim-links a {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 8px 14px;
+  font-size: 0.85rem;
+  background: var(--accent-light);
+  color: var(--accent);
+  border-radius: 8px;
+  font-weight: 600;
+  transition: all 0.2s;
+  cursor: pointer;
+  text-decoration: none;
+  border: 1.5px solid var(--accent);
+  position: relative;
+  z-index: 1;
+}
+.dim-links a:hover {
+  background: var(--accent);
+  color: #fff;
+  text-decoration: none;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(232,93,63,0.3);
+}
+.dim-links a:active {
+  transform: translateY(0);
+}
+
+/* ========== Material Checklist ========== */
+.material-list { list-style: none; }
+.material-list li {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 8px 0;
+  border-bottom: 1px solid #f0ede8;
+  font-size: 0.92rem;
+}
+.material-list li:last-child { border-bottom: none; }
+.check-item {
+  width: 20px; height: 20px;
+  min-width: 20px;
+  border: 2px solid var(--rule);
+  border-radius: 6px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.25s;
+  margin-top: 2px;
+  background: var(--bg2);
+}
+.check-item:hover { border-color: var(--accent); }
+.check-item.checked {
+  background: var(--accent);
+  border-color: var(--accent);
+}
+.check-item.checked::after {
+  content: '\2713';
+  color: #fff;
+  font-size: 0.7rem;
+  font-weight: 700;
+}
+.check-text.checked-text { text-decoration: line-through; color: var(--muted); }
+
+/* ========== Action Steps ========== */
+.action-steps { margin-bottom: 40px; }
+.action-steps-title {
+  font-size: 1.2rem;
+  font-weight: 700;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.action-step {
+  display: flex;
+  gap: 16px;
+  padding: 20px;
+  background: var(--bg2);
+  border: 1.5px solid var(--rule);
+  border-radius: var(--radius-sm);
+  margin-bottom: 12px;
+  transition: all 0.3s;
+}
+.action-step:hover {
+  border-color: var(--accent);
+  box-shadow: var(--shadow);
+}
+.action-step.completed {
+  border-color: #10B981;
+  background: #F0FDF4;
+}
+.action-step-num {
+  width: 36px; height: 36px;
+  min-width: 36px;
+  border-radius: 50%;
+  background: var(--accent-light);
+  color: var(--accent);
+  font-weight: 700;
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s;
+}
+.action-step.completed .action-step-num {
+  background: #10B981;
+  color: #fff;
+}
+.action-step-content { flex: 1; }
+.action-step-content h4 {
+  font-size: 1rem;
+  font-weight: 700;
+  margin-bottom: 4px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.action-step-content p { color: var(--muted); font-size: 0.88rem; margin: 0; }
+.step-detail {
+  display: none;
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid #f0ede8;
+  color: var(--muted);
+  font-size: 0.88rem;
+  line-height: 1.8;
+}
+.step-detail.open { display: block; animation: fadeIn 0.3s ease; }
+.toggle-detail {
+  background: none;
+  border: none;
+  color: var(--accent);
+  font-size: 0.82rem;
+  cursor: pointer;
+  padding: 0;
+  font-family: inherit;
+  font-weight: 500;
+}
+.toggle-detail:hover { text-decoration: underline; }
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ========== Tools Area ========== */
+.tools-area { margin-bottom: 40px; }
+.tools-title {
+  font-size: 1.2rem;
+  font-weight: 700;
+  margin-bottom: 16px;
+}
+.tools-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 12px;
+}
+.tool-btn {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 16px 20px;
+  background: var(--bg2);
+  border: 1.5px solid var(--rule);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--ink);
+  transition: all 0.25s;
+  font-family: inherit;
+  text-decoration: none;
+  position: relative;
+  z-index: 1;
+}
+.tool-btn:hover {
+  border-color: var(--accent);
+  background: var(--accent-light);
+  color: var(--accent);
+  transform: translateY(-2px);
+  text-decoration: none;
+}
+.tool-btn .tool-icon { font-size: 1.2rem; }
+
+/* ========== Iframe Browser ========== */
+.iframe-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(26,26,26,0.6);
+  z-index: 300;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  animation: modalFadeIn 0.3s ease;
+}
+.iframe-overlay.open { display: flex; }
+.iframe-browser {
+  background: var(--bg2);
+  border-radius: var(--radius);
+  width: 100%;
+  max-width: 1100px;
+  height: 85vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  box-shadow: 0 20px 60px rgba(26,26,26,0.25);
+  animation: modalSlideIn 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.iframe-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  background: var(--bg);
+  border-bottom: 1px solid var(--rule);
+  flex-shrink: 0;
+}
+.iframe-toolbar-title {
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: var(--ink);
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.iframe-toolbar-url {
+  font-size: 0.78rem;
+  color: var(--muted);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 300px;
+}
+.iframe-close {
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  border: 1.5px solid var(--rule);
+  background: var(--bg2);
+  cursor: pointer;
+  font-size: 1rem;
+  color: var(--muted);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+  flex-shrink: 0;
+}
+.iframe-close:hover { background: var(--accent); color: #fff; border-color: var(--accent); }
+.iframe-body {
+  flex: 1;
+  overflow: hidden;
+}
+.iframe-body iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+}
+
+/* ========== Modal ========== */
+.modal-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(26,26,26,0.5);
+  z-index: 200;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  animation: modalFadeIn 0.3s ease;
+}
+.modal-overlay.open { display: flex; }
+@keyframes modalFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+.modal {
+  background: var(--bg2);
+  border-radius: var(--radius);
+  padding: 32px;
+  max-width: 600px;
+  width: 100%;
+  max-height: 85vh;
+  overflow-y: auto;
+  position: relative;
+  animation: modalSlideIn 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 20px 60px rgba(26,26,26,0.15);
+}
+@keyframes modalSlideIn {
+  from { opacity: 0; transform: translateY(30px) scale(0.95); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+.modal-close {
+  position: absolute;
+  top: 16px; right: 16px;
+  width: 32px; height: 32px;
+  border-radius: 50%;
+  border: none;
+  background: #f5f3f0;
+  cursor: pointer;
+  font-size: 1rem;
+  color: var(--muted);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+.modal-close:hover { background: var(--accent-light); color: var(--accent); }
+.modal h3 {
+  font-size: 1.2rem;
+  font-weight: 700;
+  margin-bottom: 20px;
+}
+.form-group { margin-bottom: 16px; }
+.form-group label {
+  display: block;
+  font-size: 0.85rem;
+  font-weight: 600;
+  margin-bottom: 6px;
+  color: var(--ink);
+}
+.form-group input,
+.form-group textarea {
+  width: 100%;
+  padding: 12px 14px;
+  border: 1.5px solid var(--rule);
+  border-radius: 10px;
+  font-size: 0.92rem;
+  background: var(--bg);
+  color: var(--ink);
+  outline: none;
+  transition: border-color 0.2s;
+  font-family: inherit;
+}
+.form-group input:focus,
+.form-group textarea:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(232,93,63,0.1);
+}
+.form-group textarea { min-height: 80px; resize: vertical; }
+.generated-letter {
+  background: #FAFAF8;
+  border: 1px solid var(--rule);
+  border-radius: 10px;
+  padding: 24px;
+  font-size: 0.88rem;
+  line-height: 2;
+  white-space: pre-wrap;
+  margin-top: 16px;
+  display: none;
+}
+.generated-letter.open { display: block; animation: fadeIn 0.3s ease; }
+
+/* ========== Legal Basis ========== */
+.legal-section { margin-bottom: 40px; }
+.legal-title {
+  font-size: 1.2rem;
+  font-weight: 700;
+  margin-bottom: 16px;
+}
+.legal-item {
+  border: 1.5px solid var(--rule);
+  border-radius: var(--radius-sm);
+  margin-bottom: 8px;
+  overflow: hidden;
+  background: var(--bg2);
+  transition: all 0.3s;
+}
+.legal-item:hover { border-color: var(--accent); }
+.legal-header {
+  padding: 16px 20px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-weight: 600;
+  font-size: 0.95rem;
+  transition: background 0.2s;
+}
+.legal-header:hover { background: var(--accent-light); }
+.legal-arrow {
+  transition: transform 0.3s;
+  color: var(--muted);
+  font-size: 0.8rem;
+}
+.legal-item.open .legal-arrow { transform: rotate(180deg); }
+.legal-body {
+  display: none;
+  padding: 0 20px 16px;
+  font-size: 0.88rem;
+  color: var(--muted);
+  line-height: 1.8;
+}
+.legal-item.open .legal-body { display: block; animation: fadeIn 0.3s ease; }
+
+/* ========== Noise Special (no city tabs) ========== */
+.noise-flow {
+  background: var(--bg2);
+  border: 1.5px solid var(--rule);
+  border-radius: var(--radius-sm);
+  padding: 28px;
+  margin-bottom: 28px;
+}
+.noise-flow-title {
+  font-size: 1rem;
+  font-weight: 700;
+  margin-bottom: 16px;
+  color: var(--accent);
+}
+.noise-flow-steps {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+}
+.noise-flow-step {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  background: var(--accent-light);
+  color: var(--accent);
+  border-radius: 8px;
+  font-size: 0.88rem;
+  font-weight: 600;
+}
+.noise-flow-arrow { color: var(--muted); font-size: 0.9rem; }
+
+/* ========== Stats ========== */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+.stat-card {
+  background: var(--bg2);
+  border: 1.5px solid var(--rule);
+  border-radius: var(--radius-sm);
+  padding: 36px 28px;
+  text-align: center;
+  transition: all 0.3s;
+}
+.stat-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-hover);
+}
+.stat-num {
+  font-size: 2.8rem;
+  font-weight: 800;
+  color: var(--accent);
+  line-height: 1;
+  margin-bottom: 8px;
+}
+.stat-label {
+  font-size: 0.9rem;
+  color: var(--muted);
+}
+
+/* ========== Quote ========== */
+.quote-section {
+  background: linear-gradient(135deg, var(--accent) 0%, var(--accent-dark) 100%);
+  color: #fff;
+  padding: 80px 0;
+  text-align: center;
+}
+.quote-section blockquote {
+  font-size: clamp(1.3rem, 3vw, 1.8rem);
+  font-weight: 700;
+  line-height: 1.5;
+  max-width: 700px;
+  margin: 0 auto 16px;
+}
+.quote-section cite {
+  font-style: normal;
+  font-size: 0.95rem;
+  opacity: 0.85;
+}
+
+/* ========== Footer ========== */
+.site-footer {
+  background: var(--ink);
+  color: rgba(255,255,255,0.6);
+  padding: 40px 0;
+  text-align: center;
+  font-size: 0.85rem;
+}
+.site-footer .logo { color: #fff; margin-bottom: 8px; justify-content: center; }
+.site-footer .disclaimer {
+  margin-top: 12px;
+  font-size: 0.78rem;
+  opacity: 0.5;
+  max-width: 500px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* ========== Scroll Reveal ========== */
+.reveal {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: all 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ========== Toast ========== */
+.toast {
+  position: fixed;
+  bottom: 32px;
+  left: 50%;
+  transform: translateX(-50%) translateY(100px);
+  background: var(--ink);
+  color: #fff;
+  padding: 12px 24px;
+  border-radius: 100px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  z-index: 300;
+  opacity: 0;
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  pointer-events: none;
+  white-space: nowrap;
+}
+.toast.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+/* ========== Responsive ========== */
+@media (max-width: 900px) {
+  .hero { padding: 120px 0 80px; }
+  .scenario-grid { grid-template-columns: repeat(2, 1fr); }
+  .steps-row { grid-template-columns: 1fr; gap: 24px; }
+  .steps-row::before { display: none; }
+  .five-dims { grid-template-columns: 1fr; }
+  .stats-grid { grid-template-columns: repeat(3, 1fr); }
+  .nav-links { display: none; }
+  .mobile-menu-btn { display: block; }
+  .nav-links.open {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    top: 64px; left: 0; right: 0;
+    background: var(--bg2);
+    padding: 16px 24px;
+    border-bottom: 1px solid var(--rule);
+    box-shadow: var(--shadow);
+    gap: 16px;
+  }
+  .nav-links.open a { color: var(--ink); }
+  section { padding: 60px 0; }
+  .tools-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 600px) {
+  .hero h1 { font-size: 1.8rem; }
+  .hero-cta { flex-direction: column; }
+  .btn { width: 100%; justify-content: center; }
+  .scenario-grid { grid-template-columns: 1fr; }
+  .stats-grid { grid-template-columns: 1fr; }
+  .hero-search input { font-size: 0.9rem; padding: 14px 48px 14px 16px; }
+  .tools-grid { grid-template-columns: 1fr; }
+  .detail-header { flex-direction: column; gap: 12px; align-items: flex-start; }
+  .noise-flow-steps { flex-direction: column; align-items: stretch; }
+  .noise-flow-arrow { transform: rotate(90deg); text-align: center; }
+}
+</style>
+</head>
+<body>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<!-- Iframe Browser -->
+<div class="iframe-overlay" id="iframeOverlay" onclick="closeIframe(event)">
+  <div class="iframe-browser">
+    <div class="iframe-toolbar">
+      <span class="iframe-toolbar-title" id="iframeTitle"></span>
+      <span class="iframe-toolbar-url" id="iframeUrl"></span>
+      <button class="iframe-close" onclick="closeIframeForce()" aria-label="关闭">X</button>
+    </div>
+    <div class="iframe-body">
+      <iframe id="iframeContent" sandbox="allow-scripts allow-same-origin allow-popups allow-forms"></iframe>
+    </div>
+  </div>
+</div>
+
+<!-- Header -->
+<header class="site-header" id="siteHeader">
+  <div class="container">
+    <div class="logo">
+      <span class="logo-icon">别</span>
+      别慌
+    </div>
+    <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="菜单"><svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/></svg></button>
+    <nav>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="#hero">首页</a></li>
+        <li><a href="#scenarios">分类场景</a></li>
+        <li><a href="#howto">使用方法</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<!-- Hero -->
+<section class="hero" id="hero">
+  <div class="container">
+    <div class="hero-tag reveal"><span class="dot"></span> 生活难题解决助手</div>
+    <h1 class="reveal">遇事别慌，<br>3秒给你确定性答案</h1>
+    <p class="lead reveal">普通人遇到租房押金不退、拖欠工资、买到假货、噪音扰民、食品安全等问题时，不知道找谁、去哪办、怎么办。打开「别慌」搜一句话，立刻拿到清晰指引。</p>
+    <div class="hero-search reveal">
+      <input type="text" id="heroSearch" placeholder="描述你的问题，如：房东不退押金怎么办？">
+      <span class="search-icon"><svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg></span>
+    </div>
+    <div class="hero-cta reveal">
+      <a href="#scenarios" class="btn btn-primary">立即体验</a>
+      <a href="#howto" class="btn btn-secondary">了解使用方法</a>
+    </div>
+  </div>
+</section>
+
+<!-- Scenarios -->
+<section class="alt" id="scenarios">
+  <div class="container">
+    <div class="section-header reveal">
+      <span class="section-label">分类场景</span>
+      <h2>点击你的问题，获取解决方案</h2>
+      <p>覆盖租房、劳动、消费、邻里、食品安全五大高频民生场景</p>
+    </div>
+    <div class="scenario-grid">
+      <div class="scenario-card reveal" data-scene="rent" onclick="openScene('rent')">
+        <span class="scenario-emoji"><svg viewBox="0 0 24 24" width="36" height="36" fill="currentColor"><path d="M12 2L2 12h3v8h6v-6h2v6h6v-8h3L12 2z"/></svg></span>
+        <h3>租房押金不退</h3>
+        <p>房东或中介拒绝退还租房押金，不知如何维权？</p>
+      </div>
+      <div class="scenario-card reveal" data-scene="salary" onclick="openScene('salary')">
+        <span class="scenario-emoji"><svg viewBox="0 0 24 24" width="36" height="36" fill="currentColor"><path d="M11.8 10.9c-2.27-.59-3-1.2-3-2.15 0-1.09 1.01-1.85 2.7-1.85 1.78 0 2.44.85 2.5 2.1h2.21c-.07-1.72-1.12-3.3-3.21-3.81V3h-3v2.16c-1.94.42-3.5 1.68-3.5 3.61 0 2.31 1.91 3.46 4.7 4.13 2.5.6 3 1.48 3 2.41 0 .69-.49 1.79-2.7 1.79-2.06 0-2.87-.92-2.98-2.1h-2.2c.12 2.19 1.76 3.42 3.68 3.83V21h3v-2.15c1.95-.37 3.5-1.5 3.5-3.55 0-2.84-2.43-3.81-4.7-4.4z"/></svg></span>
+        <h3>公司拖欠工资</h3>
+        <p>公司拖欠、克扣工资或违法解除劳动合同？</p>
+      </div>
+      <div class="scenario-card reveal" data-scene="fake" onclick="openScene('fake')">
+        <span class="scenario-emoji"><svg viewBox="0 0 24 24" width="36" height="36" fill="currentColor"><path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12.9-1.63h7.45c.75 0 1.41-.41 1.75-1.03l3.58-6.49c.08-.14.12-.31.12-.48 0-.55-.45-1-1-1H5.21l-.94-2H1zm16 16c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2z"/></svg></span>
+        <h3>买到假货/消费欺诈</h3>
+        <p>买到假冒伪劣商品或遭遇消费欺诈如何索赔？</p>
+      </div>
+      <div class="scenario-card reveal" data-scene="noise" onclick="openScene('noise')">
+        <span class="scenario-emoji"><svg viewBox="0 0 24 24" width="36" height="36" fill="currentColor"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg></span>
+        <h3>楼上噪音扰民</h3>
+        <p>邻居装修、生活噪音严重影响休息怎么办？</p>
+      </div>
+      <div class="scenario-card reveal" data-scene="food" onclick="openScene('food')">
+        <span class="scenario-emoji"><svg viewBox="0 0 24 24" width="36" height="36" fill="currentColor"><path d="M11 9H9V2H7v7H5V2H3v7c0 2.12 1.66 3.84 3.75 3.97V22h2.5v-9.03C11.34 12.84 13 11.12 13 9V2h-2v7zm5-3v8h2.5v8H21V2c-2.76 0-5 2.24-5 4z"/></svg></span>
+        <h3>外卖吃出异物</h3>
+        <p>外卖食品中发现异物，如何投诉索赔？</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Detail Section (Inline) -->
+<div class="detail-section" id="detailSection">
+  <div class="detail-container">
+    <div class="detail-header">
+      <div class="detail-header-left">
+        <span class="emoji" id="detailEmoji"></span>
+        <h2 id="detailTitle"></h2>
+      </div>
+      <button class="close-detail" onclick="closeDetail()" aria-label="关闭">X</button>
+    </div>
+    <div id="detailContent"></div>
+  </div>
+</div>
+
+<!-- How to Use -->
+<section id="howto">
+  <div class="container">
+    <div class="section-header reveal">
+      <span class="section-label">使用方法</span>
+      <h2>三步搞定，遇事不慌</h2>
+      <p>无需专业知识，跟着步骤走就能拿到确定性答案</p>
+    </div>
+    <div class="steps-row">
+      <div class="use-step reveal">
+        <div class="use-step-num">1</div>
+        <h4>搜索问题</h4>
+        <p>用自然语言描述你遇到的问题，系统自动匹配对应场景</p>
+      </div>
+      <div class="use-step reveal">
+        <div class="use-step-num">2</div>
+        <h4>查看方案</h4>
+        <p>查看五维答案卡片：归谁管、去哪办、带什么、要多久、多少钱</p>
+      </div>
+      <div class="use-step reveal">
+        <div class="use-step-num">3</div>
+        <h4>按步骤行动</h4>
+        <p>按行动指南逐步执行，使用投诉信生成等工具辅助维权</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Quote -->
+<section class="quote-section">
+  <div class="container">
+    <blockquote class="reveal">"降低普通人获取公共服务信息的门槛，让每个人遇事不慌。"</blockquote>
+    <cite class="reveal">—— 别慌产品愿景</cite>
+  </div>
+</section>
+
+<!-- Stats -->
+<section class="alt" id="stats">
+  <div class="container">
+    <div class="section-header reveal">
+      <span class="section-label">数据统计</span>
+      <h2>持续覆盖，不断优化</h2>
+      <p>数据来源权威，覆盖主要城市高频民生场景</p>
+    </div>
+    <div class="stats-grid">
+      <div class="stat-card reveal">
+        <div class="stat-num" data-target="5">0</div>
+        <div class="stat-label">已覆盖场景数</div>
+      </div>
+      <div class="stat-card reveal">
+        <div class="stat-num" data-target="3">0</div>
+        <div class="stat-label">支持城市数</div>
+      </div>
+      <div class="stat-card reveal">
+        <div class="stat-num" data-target="12">0</div>
+        <div class="stat-label">法律依据数</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="site-footer">
+  <div class="container">
+    <div class="logo">
+      <span class="logo-icon">别</span>
+      别慌
+    </div>
+    <p>生活难题解决助手 &middot; Demo版</p>
+    <p class="disclaimer">免责声明：本页面数据仅供参考，建议办理前电话确认。信息来源于公开资料，不构成法律建议。</p>
+  </div>
+</footer>
+
+<!-- Modal for generating complaint letter -->
+<div class="modal-overlay" id="letterModal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal()">X</button>
+    <h3 id="modalTitle">生成投诉信</h3>
+    <div id="modalForm">
+      <div class="form-group">
+        <label for="letterName">你的姓名</label>
+        <input type="text" id="letterName" placeholder="请输入你的姓名">
+      </div>
+      <div class="form-group">
+        <label for="letterTarget">对方姓名/公司名</label>
+        <input type="text" id="letterTarget" placeholder="请输入对方姓名或公司名">
+      </div>
+      <div class="form-group">
+        <label for="letterDesc">事件简述</label>
+        <textarea id="letterDesc" placeholder="简要描述你遇到的问题"></textarea>
+      </div>
+      <div class="form-group">
+        <label for="letterAmount">涉及金额（元）</label>
+        <input type="text" id="letterAmount" placeholder="如：5000">
+      </div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:8px;">
+        <button class="btn btn-primary btn-sm" onclick="generateLetter()">生成投诉信</button>
+        <button class="btn btn-outline btn-sm" onclick="closeModal()">取消</button>
+      </div>
+    </div>
+    <div class="generated-letter" id="generatedLetter"></div>
+    <div id="letterActions" style="display:none;margin-top:12px;">
+      <button class="btn btn-primary btn-sm" onclick="copyLetter()">复制文本</button>
+    </div>
+  </div>
+</div>
+
+<script>
+var ICONS = {
+  house: '<svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><path d="M12 2L2 12h3v8h6v-6h2v6h6v-8h3L12 2z"/></svg>',
+  money: '<svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><path d="M11.8 10.9c-2.27-.59-3-1.2-3-2.15 0-1.09 1.01-1.85 2.7-1.85 1.78 0 2.44.85 2.5 2.1h2.21c-.07-1.72-1.12-3.3-3.21-3.81V3h-3v2.16c-1.94.42-3.5 1.68-3.5 3.61 0 2.31 1.91 3.46 4.7 4.13 2.5.6 3 1.48 3 2.41 0 .69-.49 1.79-2.7 1.79-2.06 0-2.87-.92-2.98-2.1h-2.2c.12 2.19 1.76 3.42 3.68 3.83V21h3v-2.15c1.95-.37 3.5-1.5 3.5-3.55 0-2.84-2.43-3.81-4.7-4.4z"/></svg>',
+  cart: '<svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12.9-1.63h7.45c.75 0 1.41-.41 1.75-1.03l3.58-6.49c.08-.14.12-.31.12-.48 0-.55-.45-1-1-1H5.21l-.94-2H1zm16 16c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2z"/></svg>',
+  volume: '<svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg>',
+  food: '<svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><path d="M11 9H9V2H7v7H5V2H3v7c0 2.12 1.66 3.84 3.75 3.97V22h2.5v-9.03C11.34 12.84 13 11.12 13 9V2h-2v7zm5-3v8h2.5v8H21V2c-2.76 0-5 2.24-5 4z"/></svg>',
+  search: '<svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>',
+  person: '<svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>',
+  location: '<svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>',
+  checklist: '<svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z"/></svg>',
+  clock: '<svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/></svg>',
+  phone: '<svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg>',
+  globe: '<svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg>',
+  chat: '<svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM6 9h12v2H6V9zm8 5H6v-2h8v2zm4-6H6V6h12v2z"/></svg>',
+  navigate: '<svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M12 2L4.5 20.29l.71.71L12 18l6.79 3 .71-.71z"/></svg>',
+  tools: '<svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M22.7 19l-9.1-9.1c.9-2.3.4-5-1.5-6.9-2-2-5-2.4-7.4-1.3L9 6 6 9 1.6 4.7C.4 7.1.9 10.1 2.9 12.1c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.5-.4.5-1.1.1-1.4z"/></svg>',
+  pen: '<svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg>',
+  law: '<svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M12 2c1.1 0 2 .9 2 2s-.9 2-2 2-2-.9-2-2 .9-2 2-2zm9 7h-6v13h-2v-6h-2v6H9V9H3V7h18v2z"/></svg>',
+  warn: '<svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg>',
+  arrowDown: '<svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/></svg>',
+  arrowUp: '<svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M7.41 15.41L12 10.83l4.59 4.58L18 14l-6-6-6 6z"/></svg>',
+  close: '<svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>'
+};
+
+// ========== DATA ==========
+var sceneData = {
+  rent: {
+    emoji: svgIcon('home'),
+    title: '租房押金不退',
+    hasCities: true,
+    cities: {
+      beijing: {
+        dept: '北京市住房和城乡建设委员会（房屋租赁管理处）',
+        address: '北京市通州区达济街9号院',
+        phones: ['010-55524558', '010-12345'],
+        website: 'https://zjw.beijing.gov.cn/',
+        workTime: '9:00-11:30，14:00-17:30（工作日）',
+        materials: [
+          '书面投诉书',
+          '住房租赁合同原件及复印件',
+          '押金支付凭证（转账记录、收据等）',
+          '房屋交接验收记录/照片',
+          '与房东/中介沟通记录（微信、短信等）',
+          '房东/中介身份信息或企业工商信息',
+          '承租人身份证原件及复印件'
+        ],
+        period: '投诉后7-15个工作日',
+        cost: '免费'
+      },
+      shanghai: {
+        dept: '上海市房屋管理局',
+        address: '上海市浦东新区世博村路300号',
+        phones: ['021-23111111', '021-12345'],
+        website: 'https://fgj.sh.gov.cn/',
+        workTime: '9:00-11:30，13:30-17:30（工作日）',
+        materials: [
+          '书面投诉书',
+          '住房租赁合同原件及复印件',
+          '押金支付凭证',
+          '退租房屋交接记录/照片视频',
+          '与出租方沟通记录',
+          '双方身份证明材料'
+        ],
+        period: '15-30个工作日',
+        cost: '免费'
+      },
+      shenzhen: {
+        dept: '深圳市住房和建设局',
+        address: '广东省深圳市福田区振华路8号（设计大厦）',
+        phones: ['0755-83788218', '0755-12345'],
+        website: 'http://zjj.sz.gov.cn/',
+        workTime: '9:00-12:00，14:00-17:30（工作日）',
+        materials: [
+          '投诉举报材料',
+          '住房租赁合同原件及复印件',
+          '押金支付凭证',
+          '房屋交接验收记录/照片',
+          '与出租方沟通记录',
+          '出租方身份信息或企业工商注册信息',
+          '投诉人身份证复印件'
+        ],
+        period: '7个工作日内决定是否受理，受理后15-30个工作日',
+        cost: '免费'
+      }
+    },
+    steps: [
+      {
+        title: '收集证据',
+        desc: '保留租房合同、押金转账记录、房屋交接照片、退租时所有沟通记录',
+        detail: '证据是维权的基础。建议将所有材料拍照或扫描备份，包括：租赁合同全文（含押金条款）、押金支付时的银行转账记录或微信/支付宝截图、入住和退租时房屋状况的照片和视频、与房东或中介的微信聊天记录、短信记录、通话录音等。特别要注意保留能证明房屋完好无损的交接验收记录。'
+      },
+      {
+        title: '与房东协商',
+        desc: '通过微信/短信书面提出退还押金请求，保留沟通记录',
+        detail: '先尝试友好协商。建议通过书面方式（微信、短信、邮件等）明确提出退还押金的金额和理由，要求对方在合理期限内（如7天）退还。如果对方口头答应但拖延，继续用书面方式催促并记录每次沟通。这些记录在后续投诉和诉讼中都是重要证据。'
+      },
+      {
+        title: '行政投诉',
+        desc: '向当地住建委/房管局提交书面投诉或拨打12345',
+        detail: '携带准备好的材料，前往当地住房和城乡建设委员会或房屋管理局提交书面投诉。也可以拨打12345市民热线，由热线转派至住建部门处理。投诉时应详细说明：租赁地址、合同期限、押金金额、房东拒绝退还的理由、已尝试协商的情况。投诉后一般会由住建部门约谈房东进行调解。'
+      },
+      {
+        title: '消协投诉',
+        desc: '拨打12315消费者投诉热线（适用于中介机构）',
+        detail: '如果出租方是中介公司（非个人房东），可以向消费者协会投诉。拨打12315热线或在 https://www.12315.cn/ 在线投诉。消协会组织双方调解，中介机构通常比个人房东更重视监管压力，投诉后更容易促成退款。'
+      },
+      {
+        title: '法律途径',
+        desc: '行政调解不成，可向房屋所在地基层法院提起诉讼',
+        detail: '如果以上途径都无法解决，可以向房屋所在地的基层人民法院提起民事诉讼。诉讼请求为：判令被告退还押金XX元及相应利息。案件适用简易程序，诉讼费约25-50元（胜诉后由被告承担）。小额诉讼一般3个月内结案，可以在网上立案（微信小程序"人民法院在线服务"），无需聘请律师也能自行完成。'
+      }
+    ],
+    legal: [
+      { title: '《住房租赁条例》第十条', content: '出租人应当按照合同约定按时退还承租人押金。租赁期满或者合同解除后，出租人应当在约定期限内将押金退还承租人；未约定期限的，应当在合理期限内退还。' },
+      { title: '《民法典》第七百一十条', content: '承租人按照约定的方法或者根据租赁物的性质使用租赁物，致使租赁物受到损耗的，不承担赔偿责任。' },
+      { title: '《北京市住房租赁条例》第三十六条', content: '住房租赁企业收取押金的，应当在住房租赁合同中约定押金的数额和退还时间。除抵扣租金、违约金以及其他费用外，应当在合同约定的期限内退还押金。' }
+    ],
+    letterType: '投诉信',
+    letterDefault: '本人于XX年XX月XX日与对方签订住房租赁合同，租赁地址为XXX，合同约定押金为XXX元。合同期满/退租后，本人已按约定交还房屋，但对方至今未退还押金，已多次协商未果。',
+    complaintUrl: 'https://www.12315.cn/',
+    complaintName: '12315投诉平台'
+  },
+  salary: {
+    emoji: svgIcon('money'),
+    title: '公司拖欠工资',
+    hasCities: true,
+    cities: {
+      beijing: {
+        dept: '北京市劳动人事争议仲裁委员会',
+        address: '北京市通州区潞城镇宏安街2号院2号楼',
+        phones: ['010-55524506', '010-12333'],
+        website: 'https://rsj.beijing.gov.cn/',
+        workTime: '9:00-11:00，13:00-16:30（工作日）',
+        materials: [
+          '仲裁申请书原件3份',
+          '身份证原件及复印件',
+          '劳动合同',
+          '工资条/银行流水',
+          '工作证/考勤记录',
+          '解除劳动关系通知书'
+        ],
+        period: '5个工作日受理审查，45日内结案',
+        cost: '免费'
+      },
+      shanghai: {
+        dept: '上海市劳动人事争议仲裁委员会',
+        address: '上海市西乡路188号',
+        phones: ['021-31012746', '021-12333'],
+        website: 'https://rsj.sh.gov.cn/',
+        workTime: '9:00-11:30，13:30-16:30（周一至周五）',
+        materials: [
+          '仲裁申请书原件2份',
+          '劳动者身份证明材料复印件',
+          '被申请人工商注册信息复印件',
+          '证据材料及清单复印件2份'
+        ],
+        period: '5个工作日受理，45日内结案',
+        cost: '免费'
+      },
+      shenzhen: {
+        dept: '深圳市劳动人事争议仲裁委员会',
+        address: '深圳市福田区深南大道8005号深圳人才园',
+        phones: ['0755-88123510', '0755-12333'],
+        website: 'https://hrss.sz.gov.cn/',
+        workTime: '9:00-12:00，14:00-18:00（周一至周五）',
+        materials: [
+          '仲裁申请书',
+          '身份证件',
+          '证据材料（劳动合同、工资条/银行流水、考勤记录）',
+          '被申请人信息'
+        ],
+        period: '5个工作日受理，45日内结案',
+        cost: '免费'
+      }
+    },
+    steps: [
+      {
+        title: '收集证据',
+        desc: '保留劳动合同、工资条或银行流水、考勤记录、工作证等',
+        detail: '证据越充分，维权越顺利。重点收集：劳动合同（证明劳动关系）、工资条或银行工资流水（证明工资标准和拖欠情况）、考勤打卡记录（证明出勤情况）、工作证或工牌（证明在职身份）、社保缴纳记录（可通过支付宝/微信查询）、与HR或领导的沟通记录、解除劳动关系通知书（如适用）。建议登录"国家企业信用信息公示系统"查询公司工商注册信息。'
+      },
+      {
+        title: '先投诉后仲裁',
+        desc: '向劳动监察大队投诉（可拨打12333），或直接申请劳动仲裁',
+        detail: '劳动监察投诉是快速渠道，通常1-2周有反馈。拨打12333劳动保障热线，或直接到当地劳动监察大队提交投诉材料。劳动监察部门有权责令企业限期支付工资，并可依法处罚。如果投诉未能解决，再转劳动仲裁。'
+      },
+      {
+        title: '提交仲裁申请',
+        desc: '向劳动合同履行地或用人单位所在地的仲裁委提交',
+        detail: '准备仲裁申请书（可到仲裁委领取模板）、身份证明复印件、证据材料清单等，前往劳动合同履行地或用人单位注册地的劳动人事争议仲裁委员会提交。申请时需填写清楚仲裁请求，如：请求裁决被申请人支付拖欠工资XXX元、经济补偿金XXX元等。材料齐全当天即可受理。'
+      },
+      {
+        title: '等待开庭',
+        desc: '仲裁委通知双方开庭时间，组织庭审',
+        detail: '仲裁委受理后5个工作日内完成审查，符合受理条件的会出具受理通知书，并通知被申请人。开庭前仲裁委会组织一次调解（庭前调解），如果调解成功则直接出具调解书。调解不成则正式开庭审理，双方进行举证质证和辩论。'
+      },
+      {
+        title: '领取裁决',
+        desc: '一般45日内作出裁决书',
+        detail: '仲裁庭应当自受理仲裁申请之日起45日内作出裁决。案情复杂需要延期的，经仲裁委员会主任批准可以延长15日。裁决书生效后，用人单位应当在裁决书规定的期限内履行。如果用人单位不履行，劳动者可以向人民法院申请强制执行。'
+      },
+      {
+        title: '不服可诉讼',
+        desc: '对裁决不服，15日内向人民法院提起诉讼',
+        detail: '劳动者或用人单位对仲裁裁决不服的，可以自收到仲裁裁决书之日起15日内向人民法院提起诉讼。注意：部分案件（追索劳动报酬不超过当地月最低工资标准12个月金额的争议）实行"一裁终局"，用人单位无权起诉，但劳动者可以起诉。'
+      }
+    ],
+    legal: [
+      { title: '《劳动法》第五十条', content: '工资应当以货币形式按月支付给劳动者本人。不得克扣或者无故拖欠劳动者的工资。' },
+      { title: '《劳动合同法》第八十五条', content: '用人单位未按时足额支付劳动报酬的，由劳动行政部门责令限期支付劳动报酬；逾期不支付的，责令按应付金额百分之五十以上百分之一百以下的标准向劳动者加付赔偿金。' },
+      { title: '《劳动争议调解仲裁法》第四十三条', content: '仲裁庭裁决劳动争议案件，应当自劳动争议仲裁委员会受理仲裁申请之日起四十五日内结束。案情复杂需要延期的，经劳动争议仲裁委员会主任批准，可以延期并书面通知当事人，但是延长期限不得超过十五日。' }
+    ],
+    letterType: '仲裁申请书',
+    letterDefault: '本人于XX年XX月XX日入职被申请人公司，担任XXX岗位，劳动合同约定月薪XXX元。自XX年XX月起，被申请人拖欠本人工资，累计金额XXX元。经多次催要未果，故申请劳动仲裁。',
+    complaintUrl: '',
+    complaintName: ''
+  },
+  fake: {
+    emoji: svgIcon('cart'),
+    title: '买到假货/消费欺诈',
+    hasCities: true,
+    cities: {
+      beijing: {
+        dept: '北京市市场监督管理局',
+        address: '北京市通州区留庄路6号院1号楼',
+        phones: ['12315', '010-82690900'],
+        website: 'https://scjgj.beijing.gov.cn/',
+        workTime: '9:00-11:30，13:30-17:30（工作日）',
+        materials: [
+          '投诉人身份信息',
+          '被投诉人名称地址',
+          '具体投诉请求',
+          '商品照片/截图',
+          '交易记录',
+          '聊天记录',
+          '支付凭证'
+        ],
+        period: '7个工作日决定受理，调解期60日',
+        cost: '免费，赔偿标准"退一赔三"（最低500元）'
+      },
+      shanghai: {
+        dept: '上海市市场监督管理局',
+        address: '上海市徐汇区肇嘉浜路301号',
+        phones: ['12315', '021-64220000'],
+        website: 'https://scjgj.sh.gov.cn/',
+        workTime: '9:00-17:30（周一至周五）',
+        materials: [
+          '投诉人身份信息',
+          '被投诉人名称地址',
+          '具体投诉请求',
+          '商品照片/截图',
+          '交易记录',
+          '聊天记录',
+          '支付凭证'
+        ],
+        period: '7个工作日决定受理，调解期60日',
+        cost: '免费，赔偿标准"退一赔三"（最低500元）'
+      },
+      shenzhen: {
+        dept: '深圳市市场监督管理局',
+        address: '深圳市福田区深南大道7010号工商物价大厦',
+        phones: ['12315', '0755-12345'],
+        website: 'https://amr.sz.gov.cn/',
+        workTime: '9:00-12:00，14:00-18:00（工作日）',
+        materials: [
+          '投诉人身份信息',
+          '被投诉人名称地址',
+          '具体投诉请求',
+          '商品照片/截图',
+          '交易记录',
+          '聊天记录',
+          '支付凭证'
+        ],
+        period: '7个工作日决定受理，调解期60日',
+        cost: '免费，赔偿标准"退一赔三"（最低500元）'
+      }
+    },
+    steps: [
+      {
+        title: '保留证据',
+        desc: '商品实物/照片、购买凭证、交易记录、宣传页面截图、与商家沟通记录',
+        detail: '买到假货后，第一步是固定证据。保留好：商品实物（不要损坏或丢弃）、购买时的发票或电子凭证（订单截图、支付记录）、商品页面截图（包括宣传页面、商品描述、价格等）、开箱视频（如有）、与商家的聊天记录、物流信息等。如果是假品牌商品，还可以保留正品对比照片。'
+      },
+      {
+        title: '联系商家',
+        desc: '先与商家协商退款/赔偿，保留沟通记录',
+        detail: '通过平台内聊天工具或电话联系商家，明确提出退款和赔偿要求。沟通时明确指出商品存在的问题（如：假货、与描述不符等），引用"退一赔三"的法律依据。保留所有沟通记录，包括通话录音。如果商家同意退款赔偿，记得保存书面确认。'
+      },
+      {
+        title: '平台投诉',
+        desc: '通过电商平台/外卖平台客服渠道投诉',
+        detail: '如果与商家协商不成，在购买平台发起投诉。选择"投诉商家"，上传证据照片和截图，说明情况并要求平台介入处理。大多数平台有先行赔付机制，经核实后会先行退款给消费者。淘宝、京东、拼多多等平台均有专门的假货投诉入口，选择"假冒品牌"等选项进行投诉。'
+      },
+      {
+        title: '12315投诉',
+        desc: '拨打12315热线或在 https://www.12315.cn/ 在线投诉',
+        detail: '登录全国12315平台（https://www.12315.cn/）或拨打12315热线进行投诉。投诉时需要提供：你的身份信息、商家名称和地址、投诉请求和事实理由、相关证据材料。市场监管部门收到投诉后7个工作日内决定是否受理，受理后会组织双方进行调解。'
+      },
+      {
+        title: '等待调解',
+        desc: '市场监督管理部门60日内组织调解',
+        detail: '受理后，市场监管部门会联系被投诉商家进行调查核实，并在60日内组织双方调解。调解成功的，制作调解协议书。如果商家拒绝调解或不履行调解协议，你可以要求终止调解，转而向法院提起诉讼。'
+      },
+      {
+        title: '法律途径',
+        desc: '调解不成可向法院起诉',
+        detail: '如果调解不成，可以向被告住所地或合同履行地的人民法院提起诉讼。起诉时可主张：《消费者权益保护法》第五十五条规定的"退一赔三"，即退还商品价款，并增加赔偿三倍价款（最低500元）。诉讼费约25-100元，小额诉讼程序快速审理。'
+      }
+    ],
+    legal: [
+      { title: '《消费者权益保护法》第五十五条', content: '经营者提供商品或者服务有欺诈行为的，应当按照消费者的要求增加赔偿其受到的损失，增加赔偿的金额为消费者购买商品的价款或者接受服务的费用的三倍；增加赔偿的金额不足五百元的，为五百元。' },
+      { title: '《消费者权益保护法》第二十四条', content: '经营者提供的商品或者服务不符合质量要求的，消费者可以依照国家规定、当事人约定退货，或者要求经营者履行更换、修理等义务。' }
+    ],
+    letterType: '投诉信',
+    letterDefault: '本人于XX年XX月XX日在被投诉人处购买了XXX商品，支付金额XXX元。收到商品后发现该商品为假冒伪劣产品（说明具体问题），与商家协商未果，故提出投诉。',
+    complaintUrl: 'https://www.12315.cn/',
+    complaintName: '12315投诉平台'
+  },
+  noise: {
+    emoji: svgIcon('speaker'),
+    title: '楼上噪音扰民',
+    hasCities: false,
+    generalInfo: {
+      flow: ['物业', '居委会', '12345', '公安派出所(110)', '法院诉讼'],
+      phones: ['12345（7x24小时）', '110（紧急情况）'],
+      materials: [
+        '录音+视频（标注时间地点）',
+        '手机分贝检测APP记录',
+        '与邻居沟通记录',
+        '物业调解记录'
+      ],
+      noiseLimit: '装修噪声限制：工作日8:00-12:00、14:00-18:00；周末及节假日禁止高噪声作业',
+      noiseStandard: '噪声标准：夜间(22:00-次日6:00)不超过45分贝，日间不超过50分贝',
+      cost: '全程免费'
+    },
+    cityNotes: {
+      beijing: '《北京市接诉即办工作条例》——市民热线即时派单',
+      shanghai: '《上海市社会生活噪声污染防治办法》——装修每日18时至次日8时及法定节假日禁止噪声作业',
+      shenzhen: '《深圳经济特区环境噪声污染防治条例》'
+    },
+    steps: [
+      {
+        title: '收集证据',
+        desc: '用手机录制噪音视频（显示时间）、下载分贝检测APP记录、保留沟通记录',
+        detail: '打开手机相机录制噪音时，确保画面能显示当前时间（可在旁边放一个显示时间的设备）。推荐下载"分贝仪"等APP实时检测并记录噪声分贝值。连续多日记录形成证据链。同时保留与邻居的微信/短信沟通记录、通话录音等。'
+      },
+      {
+        title: '物业协调',
+        desc: '书面/线上向物业投诉，要求上门劝阻，保留物业处理记录',
+        detail: '向小区物业管理公司提交书面投诉（可在业主群/物业系统提交截图），描述噪音的具体时间、频率和影响。要求物业上门劝阻并出具处理记录。物业有义务协调处理邻里纠纷，这是维权的第一步，也是后续投诉的重要证据。'
+      },
+      {
+        title: '居委会调解',
+        desc: '物业协调无效，联系居委会组织双方调解',
+        detail: '如果物业协调无效，可以联系所在社区的居委会（社区服务中心），请求组织双方当面调解。居委会调解虽然没有强制力，但调解记录可以作为后续行政投诉的证明材料。'
+      },
+      {
+        title: '拨打12345',
+        desc: '通过12345热线正式投诉，自动分派至对应部门',
+        detail: '拨打12345市民服务热线，详细描述噪音扰民情况。12345会自动将投诉分派至对应部门（如城管、环保或住建部门）。12345投诉有办理时限要求，相关部门必须在规定时间内处理并反馈。保留投诉工单号便于跟踪。'
+      },
+      {
+        title: '报警处理',
+        desc: '紧急情况拨打110，公安可现场警告/处罚',
+        detail: '噪音严重影响休息且无法通过其他途径解决时，拨打110报警。根据《治安管理处罚法》第五十八条，违反关于社会生活噪声污染防治的法律规定，制造噪声干扰他人正常生活的，处警告；警告后不改正的，处200元以上500元以下罚款。公安民警可以现场处置。'
+      },
+      {
+        title: '法院诉讼',
+        desc: '最终可通过民事诉讼要求停止侵害、赔偿损失',
+        detail: '如果所有行政调解和投诉都未能解决问题，可以依据《民法典》第二百八十八条（相邻关系）向人民法院提起民事诉讼。诉讼请求可包括：判令被告停止噪音侵害行为、赔偿因噪音导致的损失（如医疗费、精神损害赔偿等）。诉讼费约50-100元。'
+      }
+    ],
+    legal: [
+      { title: '《民法典》第二百八十八条', content: '不动产的相邻权利人应当按照有利生产、方便生活、团结互助、公平合理的原则，正确处理相邻关系。' },
+      { title: '《治安管理处罚法》第五十八条', content: '违反关于社会生活噪声污染防治的法律规定，制造噪声干扰他人正常生活的，处警告；警告后不改正的，处二百元以上五百元以下罚款。' },
+      { title: '《噪声污染防治法》第八十二条', content: '违反本法规定，有下列行为之一，由地方人民政府指定的部门说服教育，责令改正；拒不改正的，给予警告，对个人可以处二百元以上一千元以下的罚款，对单位可以处二千元以上二万元以下的罚款：……（二）在噪声敏感建筑物集中区域使用高音广播喇叭的；（三）未对商用空调器、冷却塔、水泵、油烟净化器、风机、发电机等设备采取有效的噪声污染防治措施，致使噪声排放超过噪声排放标准的。' }
+    ],
+    letterType: '投诉信',
+    letterDefault: '本人居住于XXX小区XXX号房，楼上住户长期产生噪音（具体描述：如每天XX时至XX时装修/活动产生高分贝噪音），已严重影响本人正常生活和休息。经物业协调和居委会调解均未解决，现正式投诉。',
+    complaintUrl: '',
+    complaintName: ''
+  },
+  food: {
+    emoji: svgIcon('food'),
+    title: '外卖吃出异物',
+    hasCities: true,
+    cities: {
+      beijing: {
+        dept: '北京市市场监督管理局',
+        address: '北京市通州区留庄路6号院1号楼',
+        phones: ['12315', '12345'],
+        website: 'https://scjgj.beijing.gov.cn/',
+        workTime: '9:00-11:30，13:30-17:30（工作日）',
+        onlineUrl: 'https://www.12315.cn/',
+        materials: [
+          '外卖订单截图（含订单号）',
+          '异物清晰照片/视频',
+          '异物实物妥善保存',
+          '与商家/平台沟通记录',
+          '就医记录（如有不适）'
+        ],
+        period: '平台24-48小时反馈，监管部门7个工作日受理，调解期60日',
+        cost: '退一赔十，最低1000元'
+      },
+      shanghai: {
+        dept: '上海市市场监督管理局',
+        address: '上海市徐汇区肇嘉浜路301号',
+        phones: ['12315', '12345'],
+        website: 'https://scjgj.sh.gov.cn/',
+        workTime: '9:00-11:30，13:30-17:30（工作日）',
+        onlineUrl: 'https://www.12315.cn/',
+        materials: [
+          '外卖订单截图（含订单号）',
+          '异物清晰照片/视频',
+          '异物实物妥善保存',
+          '与商家/平台沟通记录',
+          '就医记录（如有不适）'
+        ],
+        period: '平台24-48小时反馈，监管部门7个工作日受理，调解期60日',
+        cost: '退一赔十，最低1000元'
+      },
+      shenzhen: {
+        dept: '深圳市市场监督管理局',
+        address: '深圳市福田区深南大道7010号工商物价大厦',
+        phones: ['12315', '0755-12345'],
+        website: 'https://amr.sz.gov.cn/',
+        workTime: '9:00-12:00，14:00-18:00（工作日）',
+        onlineUrl: 'https://www.12315.cn/',
+        materials: [
+          '外卖订单截图（含订单号）',
+          '异物清晰照片/视频',
+          '异物实物妥善保存',
+          '与商家/平台沟通记录',
+          '就医记录（如有不适）'
+        ],
+        period: '平台24-48小时反馈，监管部门7个工作日受理，调解期60日',
+        cost: '退一赔十，最低1000元'
+      }
+    },
+    steps: [
+      {
+        title: '保留证据',
+        desc: '立即拍照/录像（异物在食品中的位置），保留剩余食品和异物，不要丢弃',
+        detail: '发现异物后第一时间拍照和录像，清楚展示异物在食品中的位置、食品包装上的信息（商家名称、订单号等）。将异物取出后单独保存在干净的密封袋或容器中，放入冰箱冷藏保存。保留完整的剩余食品。这些物证在后续投诉和检测中至关重要。'
+      },
+      {
+        title: '联系平台',
+        desc: '通过外卖平台客服投诉，要求退款和赔偿，保留沟通记录',
+        detail: '在外卖APP内找到对应订单，点击"申请售后"或联系在线客服。描述问题并上传照片证据，提出退款和赔偿要求。大多数平台有食品安全保障计划（如美团"放心吃"、饿了么"食安保"），平台可能会先行赔付。保留与客服的完整沟通记录。'
+      },
+      {
+        title: '就医处理',
+        desc: '如有不适立即就医，保留完整医疗记录',
+        detail: '如果食用后出现腹痛、腹泻、呕吐等不适症状，立即到最近的医院就诊。保留完整的医疗记录，包括：门诊病历、检查报告、诊断证明、医药费发票等。这些医疗记录是索赔医疗费用的重要证据，也可以作为向商家和平台主张更高赔偿的依据。'
+      },
+      {
+        title: '12315投诉',
+        desc: '在 https://www.12315.cn/ 在线投诉或拨打12315',
+        detail: '登录全国12315平台或拨打12315热线进行投诉。投诉对象为餐饮商家和外卖平台。提供完整的证据材料：订单信息、食品和异物照片、与平台沟通记录、医疗记录（如有）。明确投诉请求：退款+赔偿（依据"退一赔十"标准）。'
+      },
+      {
+        title: '等待处理',
+        desc: '市场监督管理部门调解，平台先行赔付',
+        detail: '市场监管部门受理投诉后，会联系商家和平台进行调查。在调查期间，平台通常会先行处理退款。监管部门组织的调解一般60日内完成。如果商家被查实存在食品安全违法行为，还会面临行政处罚。'
+      },
+      {
+        title: '食品鉴定',
+        desc: '必要时申请食品卫生检验（监管部门指定机构）',
+        detail: '如果对异物的性质或食品安全问题存在争议，可以请求市场监管部门委托专业的食品检验机构进行鉴定。鉴定费用通常由提出鉴定的一方垫付，最终由责任方承担。鉴定结果将作为监管部门处罚和消费者索赔的重要依据。'
+      }
+    ],
+    legal: [
+      { title: '《食品安全法》第一百四十八条第二款', content: '生产不符合食品安全标准的食品或者经营明知是不符合食品安全标准的食品，消费者除要求赔偿损失外，还可以向生产者或者经营者要求支付价款十倍或者损失三倍的赔偿金；增加赔偿的金额不足一千元的，为一千元。' },
+      { title: '《消费者权益保护法》第七条', content: '消费者在购买、使用商品和接受服务时享有人身、财产安全不受损害的权利。消费者有权要求经营者提供的商品和服务，符合保障人身、财产安全的要求。' }
+    ],
+    letterType: '投诉信',
+    letterDefault: '本人于XX年XX月XX日通过外卖平台在XXX商家订购了XXX餐品（订单号：XXX），食用时发现食品中混有异物（描述异物：如虫子、头发、塑料等）。本人已拍照取证并保留异物实物。',
+    complaintUrl: 'https://www.12315.cn/',
+    complaintName: '12315投诉平台'
+  }
+};
+
+// ========== SVG ICONS ==========
+function svgIcon(name) {
+  var svgs = {
+    home: '<svg viewBox="0 0 24 24"><path d="M12 2.1L1 12h3v8h6v-6h4v6h6v-8h3L12 2.1zm0 2.2l7 6.3v7.4h-2v-6H9v6H7v-7.4l7-6.3z"/></svg>',
+    money: '<svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm.5-13H11v6l5.2 3.2.8-1.3-4.5-2.7V7z"/></svg>',
+    cart: '<svg viewBox="0 0 24 24"><path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12.9-1.63h7.45c.75 0 1.41-.41 1.75-1.03l3.58-6.49A1.003 1.003 0 0 0 20 4H5.21l-.94-2H1zm16 16c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2z"/></svg>',
+    speaker: '<svg viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg>',
+    food: '<svg viewBox="0 0 24 24"><path d="M11 9H9V2H7v7H5V2H3v7c0 2.12 1.66 3.84 3.75 3.97V22h2.5v-9.03C11.34 12.84 13 11.12 13 9V2h-2v7zm5-3v8h2.5v8H21V2c-2.76 0-5 2.24-5 4z"/></svg>',
+    person: '<svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>',
+    location: '<svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>',
+    list: '<svg viewBox="0 0 24 24"><path d="M4 14h4v-4H4v4zm0 5h4v-4H4v4zM4 9h4V5H4v4zm5 5h12v-4H9v4zm0 5h12v-4H9v4zM9 5v4h12V5H9z"/></svg>',
+    clock: '<svg viewBox="0 0 24 24"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.2 3.2.8-1.3-4.5-2.7V7z"/></svg>',
+    phone: '<svg viewBox="0 0 24 24"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg>',
+    globe: '<svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg>',
+    nav: '<svg viewBox="0 0 24 24"><path d="M21.71 11.29l-9-9c-.39-.39-1.02-.39-1.41 0l-9 9c-.39.39-.39 1.02 0 1.41l9 9c.39.39 1.02.39 1.41 0l9-9c.39-.38.39-1.01 0-1.41zM14 14.5V12h-4v3H8v-4c0-.55.45-1 1-1h5V7.5l3.5 3.5-3.5 3.5z"/></svg>',
+    chat: '<svg viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg>',
+    tools: '<svg viewBox="0 0 24 24"><path d="M22.7 19l-9.1-9.1c.9-2.3.4-5-1.5-6.9-2-2-5-2.4-7.4-1.3L9 6 6 9 1.6 4.7C.4 7.1.9 10.1 2.9 12.1c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.5-.4.5-1.1.1-1.4z"/></svg>',
+    pen: '<svg viewBox="0 0 24 24"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg>',
+    law: '<svg viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 10.99h7c-.53 4.12-3.28 7.79-7 8.94V12H5V6.3l7-3.11v8.8z"/></svg>',
+    warning: '<svg viewBox="0 0 24 24"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg>',
+    close: '<svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>',
+    arrowDown: '<svg viewBox="0 0 24 24"><path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/></svg>',
+    arrowUp: '<svg viewBox="0 0 24 24"><path d="M7.41 15.41L12 10.83l4.59 4.58L18 14l-6-6-6 6z"/></svg>',
+    search: '<svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>'
+  };
+  return '<span class="inline-icon">' + (svgs[name] || '') + '</span>';
+}
+
+var currentScene = null;
+var currentCity = 'beijing';
+
+// ========== SCENE RENDERING ==========
+function openScene(sceneId) {
+  currentScene = sceneId;
+  var data = sceneData[sceneId];
+  if (!data) return;
+
+  // Update active card
+  document.querySelectorAll('.scenario-card').forEach(function(c) {
+    c.classList.remove('active');
+  });
+  var activeCard = document.querySelector('[data-scene="' + sceneId + '"]');
+  if (activeCard) activeCard.classList.add('active');
+
+  // Update header
+  document.getElementById('detailEmoji').innerHTML = data.emoji;
+  document.getElementById('detailTitle').textContent = data.title;
+
+  // Reset city
+  currentCity = 'beijing';
+
+  // Render content
+  renderDetailContent(data);
+
+  // Show detail section
+  var section = document.getElementById('detailSection');
+  section.classList.add('open');
+
+  // Smooth scroll
+  setTimeout(function() {
+    section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }, 100);
+}
+
+function closeDetail() {
+  currentScene = null;
+  document.getElementById('detailSection').classList.remove('open');
+  document.querySelectorAll('.scenario-card').forEach(function(c) {
+    c.classList.remove('active');
+  });
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function renderDetailContent(data) {
+  var html = '';
+
+  // City tabs or noise info
+  if (data.hasCities) {
+    html += renderCityTabs(data);
+    html += '<div id="cityContent">' + renderCityContent(data, 'beijing') + '</div>';
+  } else {
+    html += renderNoiseGeneral(data);
+  }
+
+  // Steps
+  html += renderSteps(data.steps);
+
+  // Tools
+  html += renderTools(data);
+
+  // Legal
+  html += renderLegal(data.legal);
+
+  document.getElementById('detailContent').innerHTML = html;
+}
+
+function renderCityTabs(data) {
+  var tabs = [
+    { id: 'beijing', name: '北京' },
+    { id: 'shanghai', name: '上海' },
+    { id: 'shenzhen', name: '深圳' }
+  ];
+  var html = '<div class="city-tabs">';
+  tabs.forEach(function(t) {
+    html += '<button class="city-tab' + (t.id === currentCity ? ' active' : '') + '" onclick="switchCity(\'' + t.id + '\')">' + t.name + '</button>';
+  });
+  html += '</div>';
+  return html;
+}
+
+function switchCity(cityId) {
+  currentCity = cityId;
+  var data = sceneData[currentScene];
+
+  // Update tabs
+  document.querySelectorAll('.city-tab').forEach(function(t) {
+    t.classList.remove('active');
+  });
+  event.target.classList.add('active');
+
+  // Update content with animation
+  var container = document.getElementById('cityContent');
+  container.style.opacity = '0';
+  container.style.transform = 'translateY(10px)';
+  setTimeout(function() {
+    container.innerHTML = renderCityContent(data, cityId);
+    container.style.transition = 'all 0.35s ease';
+    container.style.opacity = '1';
+    container.style.transform = 'translateY(0)';
+  }, 200);
+}
+
+function renderCityContent(data, cityId) {
+  var city = data.cities[cityId];
+  if (!city) return '';
+
+  var html = '<div class="five-dims">';
+
+  // 1. Who manages
+  html += '<div class="dim-card">';
+  html += '<div class="dim-card-title"><span class="dim-icon">' + ICONS.person + '</span>归谁管</div>';
+  html += '<div class="dim-content"><strong>' + city.dept + '</strong>';
+  html += '<div class="info-warn">' + ICONS.warn + ' 信息可能变动，建议出发前电话确认</div>';
+  html += '</div></div>';
+
+  // 2. Where to go
+  html += '<div class="dim-card">';
+  html += '<div class="dim-card-title"><span class="dim-icon">' + ICONS.location + '</span>去哪办</div>';
+  html += '<div class="dim-content">';
+  html += '<p><strong>地址：</strong>' + city.address + '</p>';
+  html += '<p><strong>工作时间：</strong>' + city.workTime + '</p>';
+  html += '<div class="dim-links">';
+  city.phones.forEach(function(p) {
+    html += '<a href="javascript:void(0)" onclick="copyPhone(\'' + p + '\')">' + ICONS.phone + ' ' + p + ' (点击复制)</a>';
+  });
+  if (city.website) {
+    html += '<a href="' + city.website + '">' + ICONS.globe + ' 官网</a>';
+  }
+  html += '<a href="https://uri.amap.com/search?keyword=' + encodeURIComponent(city.dept + ' ' + city.address) + '">' + ICONS.navigate + ' 导航去</a>';
+  if (city.onlineUrl) {
+    html += '<a href="' + city.onlineUrl + '">' + ICONS.chat + ' 在线投诉</a>';
+  }
+  html += '</div>';
+  html += '<div class="info-warn">' + ICONS.warn + ' 信息可能变动，建议出发前电话确认</div>';
+  html += '</div></div>';
+
+  // 3. What to bring
+  html += '<div class="dim-card">';
+  html += '<div class="dim-card-title"><span class="dim-icon">' + ICONS.checklist + '</span>带什么</div>';
+  html += '<div class="dim-content"><ul class="material-list">';
+  city.materials.forEach(function(m) {
+    html += '<li><span class="check-item" onclick="toggleCheck(this)"></span><span class="check-text">' + m + '</span></li>';
+  });
+  html += '</ul></div></div>';
+
+  // 4. How long
+  html += '<div class="dim-card">';
+  html += '<div class="dim-card-title"><span class="dim-icon">' + ICONS.clock + '</span>要多久</div>';
+  html += '<div class="dim-content"><strong>' + city.period + '</strong>';
+  html += '<div class="info-warn">' + ICONS.warn + ' 信息可能变动，建议出发前电话确认</div>';
+  html += '</div></div>';
+
+  // 5. How much
+  html += '<div class="dim-card">';
+  html += '<div class="dim-card-title"><span class="dim-icon">' + ICONS.money + '</span>多少钱</div>';
+  html += '<div class="dim-content"><strong>' + city.cost + '</strong>';
+  html += '<div class="info-warn">' + ICONS.warn + ' 信息可能变动，建议出发前电话确认</div>';
+  html += '</div></div>';
+
+  html += '</div>';
+  return html;
+}
+
+function renderNoiseGeneral(data) {
+  var info = data.generalInfo;
+  var html = '';
+
+  // Flow
+  html += '<div class="noise-flow">';
+  html += '<div class="noise-flow-title">处理顺序（全国适用）</div>';
+  html += '<div class="noise-flow-steps">';
+  info.flow.forEach(function(s, i) {
+    if (i > 0) html += '<span class="noise-flow-arrow"><svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"/></svg></span>';
+    html += '<span class="noise-flow-step">' + s + '</span>';
+  });
+  html += '</div></div>';
+
+  // Five dims (general)
+  html += '<div class="five-dims">';
+
+  // Who / Where / What / How long / How much
+  html += '<div class="dim-card">';
+  html += '<div class="dim-card-title"><span class="dim-icon">' + ICONS.phone + '</span>投诉电话</div>';
+  html += '<div class="dim-content">';
+  info.phones.forEach(function(p) {
+    html += '<p><strong>' + p.split('（')[0] + '</strong> <span style="color:var(--muted);font-size:0.85rem;">' + (p.indexOf('（') > -1 ? p.substring(p.indexOf('（')) : '') + '</span>';
+  });
+  html += '<div style="margin-top:10px;">';
+  info.phones.forEach(function(p) {
+    var phoneNum = p.split('（')[0].replace(/[^\d]/g, '');
+    if (phoneNum) html += '<a href="javascript:void(0)" onclick="copyPhone(\'' + phoneNum + '\')" style="margin-right:8px;">' + ICONS.phone + ' ' + phoneNum + ' (点击复制)</a>';
+  });
+  html += '</div>';
+  html += '<div class="info-warn">' + ICONS.warn + ' 信息可能变动，建议出发前电话确认</div>';
+  html += '</div></div>';
+
+  html += '<div class="dim-card">';
+  html += '<div class="dim-card-title"><span class="dim-icon">' + ICONS.checklist + '</span>证据材料</div>';
+  html += '<div class="dim-content"><ul class="material-list">';
+  info.materials.forEach(function(m) {
+    html += '<li><span class="check-item" onclick="toggleCheck(this)"></span><span class="check-text">' + m + '</span></li>';
+  });
+  html += '</ul></div></div>';
+
+  html += '<div class="dim-card">';
+  html += '<div class="dim-card-title"><span class="dim-icon">' + ICONS.volume + '</span>噪声标准</div>';
+  html += '<div class="dim-content"><p>' + info.noiseStandard + '</p><p>' + info.noiseLimit + '</p>';
+  html += '<div class="info-warn">' + ICONS.warn + ' 信息可能变动，建议出发前电话确认</div>';
+  html += '</div></div>';
+
+  html += '<div class="dim-card">';
+  html += '<div class="dim-card-title"><span class="dim-icon">' + ICONS.money + '</span>费用</div>';
+  html += '<div class="dim-content"><strong>' + info.cost + '</strong></div></div>';
+
+  // City notes
+  html += '<div class="dim-card">';
+  html += '<div class="dim-card-title"><span class="dim-icon">' + ICONS.globe + '</span>各城市特殊规定</div>';
+  html += '<div class="dim-content">';
+  var cityNames = { beijing: '北京', shanghai: '上海', shenzhen: '深圳' };
+  for (var k in data.cityNotes) {
+    html += '<p><strong>' + cityNames[k] + '：</strong>' + data.cityNotes[k] + '</p>';
+  }
+  html += '</div></div>';
+
+  html += '</div>';
+  return html;
+}
+
+function renderSteps(steps) {
+  var html = '<div class="action-steps">';
+  html += '<div class="action-steps-title">' + svgIcon('pen') + '行动步骤指南</div>';
+  steps.forEach(function(s, i) {
+    html += '<div class="action-step" id="step-' + currentScene + '-' + i + '">';
+    html += '<div class="action-step-num">' + (i + 1) + '</div>';
+    html += '<div class="action-step-content">';
+    html += '<h4><span class="check-item" onclick="toggleStepComplete(this)" style="margin-top:0;"></span> ' + s.title + '</h4>';
+    html += '<p>' + s.desc + '</p>';
+    html += '<div class="step-detail" id="stepDetail-' + i + '">';
+    html += s.detail;
+    html += '</div>';
+    html += '<button class="toggle-detail" onclick="toggleStepDetail(' + i + ')">' + svgIcon('arrowDown') + '展开详情</button>';
+    html += '</div></div>';
+  });
+  html += '</div>';
+  return html;
+}
+
+function renderTools(data) {
+  var html = '<div class="tools-area">';
+  html += '<div class="tools-title">' + svgIcon('tools') + '实用工具</div>';
+  html += '<div class="tools-grid">';
+
+  // Generate letter
+  html += '<button class="tool-btn" onclick="openLetterModal(\'' + currentScene + '\')">';
+  html += '<span class="tool-icon">' + svgIcon('pen') + '</span>生成' + data.letterType + '</button>';
+
+  // Copy phone
+  var phoneToCopy = '';
+  if (data.hasCities) {
+    phoneToCopy = data.cities[currentCity].phones[0].replace(/[^\d]/g, '');
+  } else {
+    phoneToCopy = '12345';
+  }
+  html += '<button class="tool-btn" onclick="copyPhone(\'' + phoneToCopy + '\')">';
+  html += '<span class="tool-icon">' + svgIcon('phone') + '</span>一键复制电话</button>';
+
+  // 12315
+  if (data.complaintUrl) {
+    html += '<button class="tool-btn" onclick="window.location.href=\'' + data.complaintUrl + '\'">';
+    html += '<span class="tool-icon">' + svgIcon('globe') + '</span>跳转' + data.complaintName + '</button>';
+  }
+
+  // Navigation
+  if (data.hasCities) {
+    var city = data.cities[currentCity];
+    var navUrl = 'https://uri.amap.com/search?keyword=' + encodeURIComponent(city.dept + ' ' + city.address);
+    html += '<button class="tool-btn" onclick="window.location.href=\'' + navUrl + '\'">';
+    html += '<span class="tool-icon">' + svgIcon('nav') + '</span>高德地图导航</button>';
+  }
+
+  html += '</div></div>';
+  return html;
+}
+
+function renderLegal(legalItems) {
+  if (!legalItems || legalItems.length === 0) return '';
+  var html = '<div class="legal-section">';
+  html += '<div class="legal-title">' + svgIcon('law') + '法律依据</div>';
+  legalItems.forEach(function(l, i) {
+    html += '<div class="legal-item">';
+    html += '<div class="legal-header" onclick="toggleLegal(' + i + ')">';
+    html += '<span>' + l.title + '</span>';
+    html += '<span class="legal-arrow">' + svgIcon('arrowDown') + '</span>';
+    html += '</div>';
+    html += '<div class="legal-body" id="legalBody-' + i + '">' + l.content + '</div>';
+    html += '</div>';
+  });
+  html += '</div>';
+  return html;
+}
+
+// ========== INTERACTIONS ==========
+function toggleCheck(el) {
+  el.classList.toggle('checked');
+  var text = el.nextElementSibling;
+  if (text) text.classList.toggle('checked-text');
+}
+
+function toggleStepComplete(el) {
+  var step = el.closest('.action-step');
+  step.classList.toggle('completed');
+}
+
+function toggleStepDetail(idx) {
+  var detail = document.getElementById('stepDetail-' + idx);
+  var btn = detail.previousElementSibling.nextElementSibling.nextElementSibling;
+  if (!btn) {
+    // fallback: find button in parent
+    btn = detail.parentElement.querySelector('.toggle-detail');
+  }
+  if (detail.classList.contains('open')) {
+    detail.classList.remove('open');
+    if (btn) btn.innerHTML = svgIcon('arrowDown') + '展开详情';
+  } else {
+    detail.classList.add('open');
+    if (btn) btn.innerHTML = svgIcon('arrowUp') + '收起详情';
+  }
+}
+
+function toggleLegal(idx) {
+  var item = document.getElementById('legalBody-' + idx).parentElement;
+  item.classList.toggle('open');
+}
+
+function copyPhone(phone) {
+  navigator.clipboard.writeText(phone).then(function() {
+    showToast('已复制电话：' + phone);
+  }).catch(function() {
+    // Fallback
+    var ta = document.createElement('textarea');
+    ta.value = phone;
+    ta.style.position = 'fixed';
+    ta.style.opacity = '0';
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand('copy');
+    document.body.removeChild(ta);
+    showToast('已复制电话：' + phone);
+  });
+}
+
+function openLinkSafe(url, name) {
+  var overlay = document.getElementById('iframeOverlay');
+  var iframe = document.getElementById('iframeContent');
+  var title = document.getElementById('iframeTitle');
+  var urlEl = document.getElementById('iframeUrl');
+  title.textContent = name;
+  urlEl.textContent = url;
+  iframe.src = url;
+  overlay.classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeIframe(e) {
+  if (e.target === document.getElementById('iframeOverlay')) {
+    closeIframeForce();
+  }
+}
+
+function closeIframeForce() {
+  var overlay = document.getElementById('iframeOverlay');
+  var iframe = document.getElementById('iframeContent');
+  overlay.classList.remove('open');
+  iframe.src = 'about:blank';
+  document.body.style.overflow = '';
+}
+
+function showToast(msg) {
+  var toast = document.getElementById('toast');
+  toast.textContent = msg;
+  toast.classList.add('show');
+  setTimeout(function() { toast.classList.remove('show'); }, 2500);
+}
+
+// ========== LETTER MODAL ==========
+function openLetterModal(sceneId) {
+  var data = sceneData[sceneId];
+  var modal = document.getElementById('letterModal');
+  document.getElementById('modalTitle').textContent = '生成' + data.letterType;
+  document.getElementById('letterDesc').value = data.letterDefault || '';
+  document.getElementById('letterName').value = '';
+  document.getElementById('letterTarget').value = '';
+  document.getElementById('letterAmount').value = '';
+  document.getElementById('generatedLetter').classList.remove('open');
+  document.getElementById('generatedLetter').textContent = '';
+  document.getElementById('letterActions').style.display = 'none';
+  document.getElementById('modalForm').style.display = 'block';
+  modal.classList.add('open');
+  modal.dataset.scene = sceneId;
+}
+
+function closeModal() {
+  document.getElementById('letterModal').classList.remove('open');
+}
+
+function generateLetter() {
+  var sceneId = document.getElementById('letterModal').dataset.scene;
+  var data = sceneData[sceneId];
+  var name = document.getElementById('letterName').value.trim() || 'XXX';
+  var target = document.getElementById('letterTarget').value.trim() || 'XXX（对方名称）';
+  var desc = document.getElementById('letterDesc').value.trim() || data.letterDefault;
+  var amount = document.getElementById('letterAmount').value.trim() || 'XXX';
+
+  var today = new Date();
+  var dateStr = today.getFullYear() + '年' + (today.getMonth() + 1) + '月' + today.getDate() + '日';
+
+  var letterTitle = '';
+  var letterBody = '';
+
+  if (sceneId === 'salary') {
+    letterTitle = '劳动人事争议仲裁申请书';
+    letterBody = '申请人：' + name + '\n\n';
+    letterBody += '被申请人：' + target + '\n\n';
+    letterBody += '仲裁请求：\n';
+    letterBody += '1. 请求裁决被申请人支付拖欠工资人民币' + amount + '元；\n';
+    letterBody += '2. 请求裁决被申请人支付经济补偿金（如有）。\n\n';
+    letterBody += '事实与理由：\n\n';
+    letterBody += desc + '\n\n';
+    letterBody += '综上所述，为维护申请人合法权益，特依据相关法律法规向贵委提起仲裁申请，恳请依法裁决。\n\n';
+    letterBody += '此致\n';
+    letterBody += data.cities[currentCity] ? data.cities[currentCity].dept + '\n\n' : '劳动人事争议仲裁委员会\n\n';
+    letterBody += '申请人：' + name + '\n';
+    letterBody += '日期：' + dateStr + '\n\n';
+    letterBody += '附件：\n';
+    letterBody += '1. 仲裁申请书副本\n';
+    letterBody += '2. 申请人身份证复印件\n';
+    letterBody += '3. 劳动合同复印件\n';
+    letterBody += '4. 工资条/银行流水\n';
+    letterBody += '5. 其他证据材料';
+  } else {
+    letterTitle = '投诉信';
+    letterBody = '投诉人：' + name + '\n';
+    letterBody += '联系电话：[请填写]\n';
+    letterBody += '联系地址：[请填写]\n\n';
+    letterBody += '被投诉人：' + target + '\n\n';
+    letterBody += '投诉事项：\n\n';
+    letterBody += desc + '\n\n';
+    letterBody += '涉及金额：' + amount + '元\n\n';
+    letterBody += '投诉请求：\n';
+    if (sceneId === 'rent') {
+      letterBody += '1. 请求贵部门依法责令被投诉人退还租房押金人民币' + amount + '元；\n';
+      letterBody += '2. 请求对被投诉人的违规行为依法处理。\n\n';
+    } else if (sceneId === 'fake') {
+      letterBody += '1. 请求贵部门依法查处被投诉人的欺诈行为；\n';
+      letterBody += '2. 请求责令被投诉人退还货款并按照"退一赔三"标准赔偿，即赔偿金额' + amount + '元（最低500元）。\n\n';
+    } else if (sceneId === 'food') {
+      letterBody += '1. 请求贵部门依法查处被投诉人的食品安全违法行为；\n';
+      letterBody += '2. 请求责令被投诉人退还餐费并按照"退一赔十"标准赔偿，即赔偿金额' + amount + '元（最低1000元）。\n\n';
+    } else {
+      letterBody += '1. 请求贵部门依法调查处理上述问题；\n';
+      letterBody += '2. 请求责令被投诉人停止侵害行为并赔偿损失。\n\n';
+    }
+    letterBody += '此致\n';
+    var deptName = '市场监督管理局';
+    if (sceneId === 'rent') {
+      deptName = data.cities[currentCity] ? data.cities[currentCity].dept : '住房和城乡建设委员会';
+    }
+    letterBody += deptName + '\n\n';
+    letterBody += '投诉人：' + name + '\n';
+    letterBody += '日期：' + dateStr + '\n\n';
+    letterBody += '附件：\n';
+    letterBody += '1. 相关证据材料\n';
+    letterBody += '2. 身份证明材料';
+  }
+
+  var fullText = '【' + letterTitle + '】\n\n' + letterBody;
+
+  document.getElementById('generatedLetter').textContent = fullText;
+  document.getElementById('generatedLetter').classList.add('open');
+  document.getElementById('letterActions').style.display = 'block';
+}
+
+function copyLetter() {
+  var text = document.getElementById('generatedLetter').textContent;
+  navigator.clipboard.writeText(text).then(function() {
+    showToast('投诉信已复制到剪贴板');
+  }).catch(function() {
+    var ta = document.createElement('textarea');
+    ta.value = text;
+    ta.style.position = 'fixed';
+    ta.style.opacity = '0';
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand('copy');
+    document.body.removeChild(ta);
+    showToast('投诉信已复制到剪贴板');
+  });
+}
+
+// Click outside modal to close
+document.getElementById('letterModal').addEventListener('click', function(e) {
+  if (e.target === this) closeModal();
+});
+
+// ========== SEARCH ==========
+var searchKeywords = {
+  rent: ['租房', '押金', '房东', '中介', '退租', '不退', '租金', '租约', '公寓', '房管', '租赁'],
+  salary: ['工资', '拖欠', '欠薪', '克扣', '劳动', '公司', '老板', '仲裁', '社保', '辞退', '解雇', '离职', '加班'],
+  fake: ['假货', '消费', '欺诈', '买到', '退货', '退款', '假冒', '伪劣', '质量', '维权', '商家', '投诉', '电商'],
+  noise: ['噪音', '噪声', '扰民', '楼上', '装修', '邻居', '吵', '安静', '休息', '睡觉', '分贝'],
+  food: ['外卖', '异物', '食品安全', '吃出', '餐品', '商家', '食品', '卫生', '变质', '腐败', '餐厅']
+};
+
+document.getElementById('heroSearch').addEventListener('input', function() {
+  var val = this.value.trim().toLowerCase();
+
+  // Remove all highlights
+  document.querySelectorAll('.scenario-card').forEach(function(c) {
+    c.classList.remove('highlighted');
+  });
+
+  if (!val) return;
+
+  // Match scenes
+  var matched = [];
+  for (var key in searchKeywords) {
+    var kws = searchKeywords[key];
+    for (var i = 0; i < kws.length; i++) {
+      if (val.indexOf(kws[i]) !== -1 || kws[i].indexOf(val) !== -1) {
+        matched.push(key);
+        break;
+      }
+    }
+  }
+
+  // Highlight matched cards
+  matched.forEach(function(sceneId) {
+    var card = document.querySelector('[data-scene="' + sceneId + '"]');
+    if (card) card.classList.add('highlighted');
+  });
+
+  // If only one match, open it after a short delay
+  if (matched.length === 1 && val.length >= 2) {
+    clearTimeout(window._searchTimer);
+    window._searchTimer = setTimeout(function() {
+      openScene(matched[0]);
+    }, 800);
+  }
+});
+
+// ========== MOBILE MENU ==========
+document.getElementById('mobileMenuBtn').addEventListener('click', function() {
+  document.getElementById('navLinks').classList.toggle('open');
+});
+
+// Close mobile menu on link click
+document.querySelectorAll('.nav-links a').forEach(function(a) {
+  a.addEventListener('click', function() {
+    document.getElementById('navLinks').classList.remove('open');
+  });
+});
+
+// ========== HEADER SCROLL ==========
+window.addEventListener('scroll', function() {
+  var header = document.getElementById('siteHeader');
+  if (window.scrollY > 20) {
+    header.classList.add('scrolled');
+  } else {
+    header.classList.remove('scrolled');
+  }
+});
+
+// ========== SCROLL REVEAL ==========
+(function() {
+  var reveals = document.querySelectorAll('.reveal');
+  var observer = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+      }
+    });
+  }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+  reveals.forEach(function(el) { observer.observe(el); });
+})();
+
+// ========== STATS COUNTER ==========
+(function() {
+  var statNums = document.querySelectorAll('.stat-num[data-target]');
+  var observer = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+      if (entry.isIntersecting) {
+        var el = entry.target;
+        var target = parseInt(el.dataset.target);
+        animateCount(el, target);
+        observer.unobserve(el);
+      }
+    });
+  }, { threshold: 0.5 });
+  statNums.forEach(function(el) { observer.observe(el); });
+
+  function animateCount(el, target) {
+    var current = 0;
+    var duration = 1500;
+    var step = target / (duration / 16);
+    function update() {
+      current += step;
+      if (current >= target) {
+        el.textContent = target + '+';
+        return;
+      }
+      el.textContent = Math.floor(current) + '+';
+      requestAnimationFrame(update);
+    }
+    update();
+  }
+})();
+</script>
+</body>
+</html>
